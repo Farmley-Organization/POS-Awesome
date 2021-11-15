@@ -144,7 +144,7 @@ export default {
       { text: __('Name'), align: 'start', sortable: true, value: 'item_name' },
       { text: __('Rate'), value: 'rate', align: 'start' },
       { text: __('Available QTY'), value: 'actual_qty', align: 'start' },
-      { text: __('UOM'), value: 'stock_uom', align: 'start' },
+      { text: __('UOM'), value: 'sales_uom', align: 'start' },
     ],
     offersCount: 0,
     appliedOffersCount: 0,
