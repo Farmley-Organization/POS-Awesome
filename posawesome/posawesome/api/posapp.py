@@ -156,6 +156,7 @@ def get_items(pos_profile, price_list=None):
         ),
         as_dict=1,
     )
+    # print('============================items_data===========================',items_data)
 
     if items_data:
         items = [d.item_code for d in items_data]
@@ -177,6 +178,7 @@ def get_items(pos_profile, price_list=None):
                 filters={"parent": item_code},
                 fields=["barcode", "posa_uom"],
             )
+            # print("===================Barcode=====================",item_barcode)
             serial_no_data = []
             if pos_profile.get("posa_search_serial_no"):
                 serial_no_data = frappe.get_all(
@@ -675,6 +677,8 @@ def delete_invoice(invoice):
 
 @frappe.whitelist()
 def get_items_details(pos_profile, items_data):
+    print("============1===================",items_data)
+    # print("============posprofile===================",pos_profile)
     pos_profile = json.loads(pos_profile)
     items_data = json.loads(items_data)
     warehouse = pos_profile.get("warehouse")

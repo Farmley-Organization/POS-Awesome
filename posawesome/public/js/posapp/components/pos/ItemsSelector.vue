@@ -295,6 +295,7 @@ export default {
     },
     update_items_details(items) {
       const vm = this;
+      console.log(items);
       frappe.call({
         method: 'posawesome.posawesome.api.posapp.get_items_details',
         args: {
