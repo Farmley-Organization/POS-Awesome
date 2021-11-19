@@ -382,8 +382,12 @@ export default {
           let found = false;
           for (let element of item.item_barcode) {
             if (element.barcode == this.search) {
-              found = true;
-              break;
+                if(element.country == this.pos_profile.country)
+                {
+                    found = true;
+                    break;
+                }
+
             }
           }
           return found;

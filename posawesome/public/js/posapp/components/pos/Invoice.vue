@@ -711,7 +711,7 @@ export default {
 
     add_item(item) {
       if (!item.uom) {
-        item.uom = item.stock_uom;
+        item.uom = item.sales_uom;
       }
       const index = this.items.findIndex(
         (el) =>
