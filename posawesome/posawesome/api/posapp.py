@@ -131,6 +131,7 @@ def get_items(pos_profile, price_list=None):
             name AS item_code,
             item_name,
             description,
+	    stock_uom,
             sales_uom,
             image,
             is_stock_item,
