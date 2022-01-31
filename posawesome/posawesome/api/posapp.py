@@ -493,9 +493,12 @@ def set_batch_nos_for_bundels(doc, warehouse_field, throw=False):
         warehouse = d.get(warehouse_field, None)
         if has_batch_no and warehouse and qty > 0:
             if not d.batch_no:
-                d.batch_no = get_batch_no(
-                    d.item_code, warehouse, qty, throw, d.serial_no
-                )
+                doc=frappe.get_doc("Item",d.item_code)
+                for i in doc.uoms:
+                    if d.uom==i.uom:
+                        d.batch_no = get_batch_no(
+                            d.item_code, warehouse, qty*i.conversion_factor, throw, d.serial_no
+                        )
             else:
                 batch_qty = get_batch_qty(batch_no=d.batch_no, warehouse=warehouse)
                 if flt(batch_qty, d.precision("qty")) < flt(qty, d.precision("qty")):
@@ -724,7 +727,7 @@ def get_items_details(pos_profile, items_data):
             from erpnext.stock.doctype.batch.batch import get_batch_qty
 
             batch_list = get_batch_qty(warehouse=warehouse, item_code=item_code)
-
+            print("&&&&&&&&&&&&&&&",batch_list)
             if batch_list:
                 for batch in batch_list:
                     if batch.qty > 0 and batch.batch_no:
@@ -765,9 +768,14 @@ def get_item_detail(item, doc=None, warehouse=None, price_list=None):
     item = json.loads(item)
     item_code = item.get("item_code")
     if warehouse and item.get("has_batch_no") and not item.get("batch_no"):
-        item["batch_no"] = get_batch_no(
-            item_code, warehouse, item.get("qty"), False, item.get("d")
-        )
+        doc=frappe.get_doc("Item",item_code)
+        for i in doc.uoms:
+            if item.get("uom")==i.uom:
+                item["batch_no"] = get_batch_no(
+                    item_code, warehouse, item.get("qty")*i.conversion_factor, False, item.get("d")
+                )
+                print(item.get("qty"))
+                print(i.conversion_factor)
     item["selling_price_list"] = price_list
     max_discount = frappe.get_value("Item", item_code, "max_discount")
     res = get_item_details(
