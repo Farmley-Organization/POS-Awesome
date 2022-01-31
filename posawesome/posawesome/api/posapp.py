@@ -495,9 +495,12 @@ def set_batch_nos_for_bundels(doc, warehouse_field, throw=False):
         warehouse = d.get(warehouse_field, None)
         if has_batch_no and warehouse and qty > 0:
             if not d.batch_no:
-                d.batch_no = get_batch_no(
-                    d.item_code, warehouse, qty, throw, d.serial_no
-                )
+                doc=frappe.get_doc("Item",d.item_code)
+                for i in doc.uoms:
+                    if d.uom==i.uom:
+                        d.batch_no = get_batch_no(
+                            d.item_code, warehouse, qty/i.conversion_factor, throw, d.serial_no
+                        )
             else:
                 batch_qty = get_batch_qty(batch_no=d.batch_no, warehouse=warehouse)
                 if flt(batch_qty, d.precision("qty")) < flt(qty, d.precision("qty")):
